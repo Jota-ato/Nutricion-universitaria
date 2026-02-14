@@ -19,3 +19,18 @@ export interface MacroDistribution {
     fats: number;
     carbs: number;
 }
+
+// src/features/calc/types.ts
+
+export interface GoalData {
+    currentWeight: number;
+    targetWeight: number;
+    weeksToGoal: number; // El usuario elige cuánto tiempo quiere tardar
+    goal: Goal;
+}
+
+export interface MacroResult extends MacroDistribution {
+    dailyDeficitOrSurplus: number;
+    isSafe: boolean;
+    message?: string;
+}
