@@ -1,5 +1,5 @@
 // src/app/onboarding/page.tsx
-import { OnboardingForm } from "@/src/components/forms/onboarding";
+import { OnboardingForm } from "@/components/forms/onboarding";
 
 export default function OnboardingPage() {
     return (
