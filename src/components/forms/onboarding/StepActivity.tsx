@@ -11,7 +11,7 @@ import OcupationForm from "./OccupationForm"
 import DetailTrainingInfo from "./DetailTrainingInfoForm"
 import ActivityTypeForm from "./ActivityTypeForm"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { type StepActivityValues, stepActivitySchema } from "../schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Intensity, Occupation } from "@/features/calc"
@@ -39,7 +39,10 @@ export default function StepActivity() {
             trainingIntensity: '' as Intensity
         }
     })
-    const doesActivity = form.watch("hasActivity");
+    const doesActivity = useWatch({
+        control: form.control,
+        name: "hasActivity"
+    });
 
     const onNextStep = async () => {
         const fieldsByStep: Record<number, (keyof StepActivityValues)[]> = {
@@ -88,21 +91,21 @@ export default function StepActivity() {
                             opacity: { duration: 0.2 }
                         }}
                     >
-                    {localStep === 1 && <OcupationForm form={form} />}
-                    {localStep === 2 && <StepsForm form={form} />}
-                    {localStep === 3 && <ActivityTypeForm form={form} />}
-                    {(localStep === 4 && doesActivity) && <DetailTrainingInfo form={form} />}
-                </motion.div>
-                <Field>
-                    <Button
-                        onClick={onNextStep}
-                        className="cursor-pointer"
-                    >
-                        {(localStep < 4 && !(localStep === 3 && !doesActivity)) ? 'siguiente' : 'continuar'}
-                    </Button>
-                </Field>
+                        {localStep === 1 && <OcupationForm form={form} />}
+                        {localStep === 2 && <StepsForm form={form} />}
+                        {localStep === 3 && <ActivityTypeForm form={form} />}
+                        {(localStep === 4 && doesActivity) && <DetailTrainingInfo form={form} />}
+                    </motion.div>
+                    <Field>
+                        <Button
+                            onClick={onNextStep}
+                            className="cursor-pointer"
+                        >
+                            {(localStep < 4 && !(localStep === 3 && !doesActivity)) ? 'siguiente' : 'continuar'}
+                        </Button>
+                    </Field>
+                </FieldGroup>
             </FieldGroup>
-        </FieldGroup>
         </AnimatePresence >
     )
 }
