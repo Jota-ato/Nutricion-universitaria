@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { Intensity, Occupation } from '@/features/calc';
 
 interface OnboardingState {
     step: number;
@@ -9,8 +10,14 @@ interface OnboardingState {
             age: number;
             height: number;
             weight: number;
+        },
+        activityData: {
+            dailySteps: number,
+            occupation: Occupation,
+            trainingDays: number,
+            sesionDuration: number,
+            trainingIntensity: Intensity
         }
-
     };
     setStep: (step: number) => void;
     updateFormData: (data: Partial<OnboardingState['formData']>) => void;
@@ -21,7 +28,19 @@ export const useOnboardingStore = create<OnboardingState>()(
         (set) => ({
             step: 1,
             formData: {
-                basicData: { name: '', age: 0, height: 0, weight: 0 }
+                basicData: {
+                    name: '',
+                    age: 0,
+                    height: 0,
+                    weight: 0
+                },
+                activityData: {
+                    dailySteps: 0,
+                    trainingDays: 0,
+                    sesionDuration: 0,
+                    occupation: '' as Occupation,
+                    trainingIntensity: '' as Intensity
+                }
             },
             setStep: (step) => set({ step }),
             updateFormData: (data) =>

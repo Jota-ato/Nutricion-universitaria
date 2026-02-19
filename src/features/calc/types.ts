@@ -20,12 +20,10 @@ export interface MacroDistribution {
     carbs: number;
 }
 
-// src/features/calc/types.ts
-
 export interface GoalData {
     currentWeight: number;
     targetWeight: number;
-    weeksToGoal: number; // El usuario elige cuánto tiempo quiere tardar
+    weeksToGoal: number;
     goal: Goal;
 }
 

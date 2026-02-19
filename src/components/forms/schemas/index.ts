@@ -8,3 +8,13 @@ export const stepBasicSchema = z.object({
 })
 
 export type StepBasicValues = z.infer<typeof stepBasicSchema>
+
+export const stepActivitySchema = z.object({
+    hasActivity: z.string().min(1, "Selecciona una opción"),
+    sessionsPerWeek: z.coerce.number().min(1, "Mínimo 1").max(21).optional(),
+    durationPerSession: z.coerce.number().min(10, "Mínimo 10 min").max(300).optional(),
+    occupation: z.string().min(1, "Selecciona tu ocupación"),
+    dailySteps: z.coerce.number().min(0, "Mínimo 0").max(50000, "Valor poco realista")
+});
+
+export type StepActivityValues = z.infer<typeof stepActivitySchema>;

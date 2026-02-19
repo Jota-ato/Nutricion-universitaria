@@ -71,7 +71,7 @@ export default function StepBasic() {
                         id="height"
                     />
                     {errors.height && (
-                        <FieldError>Altura mínima 100cm</FieldError>
+                        <FieldError>Altura min 100cm y max 250cm</FieldError>
                     )}
                 </Field>
                 <Field>
@@ -84,7 +84,7 @@ export default function StepBasic() {
                         id="weight"
                     />
                     {errors.weight && (
-                        <FieldError>Peso mínimo 30kg</FieldError>
+                        <FieldError>Peso min. 30kg y max. 300kg</FieldError>
                     )}
                 </Field>
                 <FieldSeparator />
