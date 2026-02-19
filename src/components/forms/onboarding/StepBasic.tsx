@@ -31,7 +31,7 @@ export default function StepBasic() {
 
     return (
         <FieldGroup>
-            <FieldLegend>
+            <FieldLegend className="mb-0 text-primary">
                 Cuentanos un poco más de ti
             </FieldLegend>
             <FieldGroup>
