@@ -1,4 +1,4 @@
 export * from './types';
-export * from './BMR'; // Tu archivo actual
-export * from './pal';
+export * from './BMR';
+export * from './PAL';
 export * from './macros';
