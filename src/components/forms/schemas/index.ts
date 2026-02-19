@@ -1,4 +1,19 @@
 import { z } from 'zod';
+import type { UseFormReturn } from "react-hook-form";
+import type { Occupation, Intensity } from '@/features/calc';
+
+const occupationValues: [Occupation, ...Occupation[]] = [
+    "sedentary",
+    "light",
+    "moderate",
+    "heavy",
+];
+
+const intensityValues: [Intensity, ...Intensity[]] = [
+    "high",
+    "low",
+    "moderate"
+];
 
 export const stepBasicSchema = z.object({
     name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -10,11 +25,20 @@ export const stepBasicSchema = z.object({
 export type StepBasicValues = z.infer<typeof stepBasicSchema>
 
 export const stepActivitySchema = z.object({
-    hasActivity: z.string().min(1, "Selecciona una opción"),
-    sessionsPerWeek: z.coerce.number().min(1, "Mínimo 1").max(21).optional(),
-    durationPerSession: z.coerce.number().min(10, "Mínimo 10 min").max(300).optional(),
-    occupation: z.string().min(1, "Selecciona tu ocupación"),
+    hasActivity: z.boolean(),
+    sessionsPerWeek: z.coerce.number().min(1, "Mínimo 1").max(21),
+    durationPerSession: z.coerce.number().min(10, "Mínimo 10 min").max(300),
+    occupation: z.enum(occupationValues),
+    trainingIntensity: z.enum(intensityValues),
     dailySteps: z.coerce.number().min(0, "Mínimo 0").max(50000, "Valor poco realista")
 });
 
 export type StepActivityValues = z.infer<typeof stepActivitySchema>;
+export type FormType = UseFormReturn<{
+    hasActivity: boolean;
+    sessionsPerWeek: number;
+    durationPerSession: number;
+    occupation: Occupation;
+    trainingIntensity: Intensity;
+    dailySteps: number;
+}, any, undefined>

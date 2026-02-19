@@ -1,42 +1,60 @@
-import { UseFormReturn } from "react-hook-form";
-import { StepActivityValues } from "../schemas";
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+    Field,
+    FieldLabel,
+    FieldError
+} from "@/components/ui/field"
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { Controller } from "react-hook-form"
+import type { FormType } from "../schemas"
 
-export default function OccupationForm({ form }: { form: UseFormReturn<StepActivityValues> }) {
-    const { errors } = form.formState;
-
+export default function OcupationForm({ form }: { form: FormType }) {
     return (
-        <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
-            <Field>
-                <FieldLabel>Tipo de Ocupación</FieldLabel>
-                <Select
-                    onValueChange={(val) => form.setValue("occupation", val)}
-                    defaultValue={form.getValues("occupation")}
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder="¿Qué haces la mayor parte del día?" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="sedentary">Sentado (Estudiante / Oficina)</SelectItem>
-                        <SelectItem value="light_effort">De pie / Caminata ligera (Ventas / Maestro)</SelectItem>
-                        <SelectItem value="moderate_effort">Movimiento constante (Mesero / Entrega)</SelectItem>
-                        <SelectItem value="heavy_effort">Esfuerzo físico intenso (Construcción / Carga)</SelectItem>
-                    </SelectContent>
-                </Select>
-                {errors.occupation && <FieldError>{errors.occupation.message}</FieldError>}
-            </Field>
-
-            <Field>
-                <FieldLabel>Pasos diarios promedio</FieldLabel>
-                <Input
-                    {...form.register("dailySteps")}
-                    type="number"
-                    placeholder="Ej. 8000. 1 paso ~ 0.0008km"
-                />
-                {errors.dailySteps && <FieldError>{errors.dailySteps.message}</FieldError>}
-            </Field>
-        </div>
-    );
+        <Controller
+            name="occupation"
+            control={form.control}
+            render={({ field, fieldState }) => (
+                <Field>
+                    <FieldLabel htmlFor="occupation">
+                        ¿Cómo es tu estilo de vida?
+                    </FieldLabel>
+                    <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                    >
+                        <SelectTrigger id="occupation" onBlur={field.onBlur}>
+                            <SelectValue placeholder="Sedentario, moderado o muy activo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value="sedentary">
+                                    Mayormente sentado - (ejem. Oficinista)
+                                </SelectItem>
+                                <SelectItem value="light">
+                                    Ligeramente activo - (ejem. Estudiante, Maestro)
+                                </SelectItem>
+                                <SelectItem value="moderate">
+                                    Moderadamente activo - (ejem. Construcción, Mesero)
+                                </SelectItem>
+                                <SelectItem value="heavy">
+                                    Muy activo - (ejem. Granjero, Minero)
+                                </SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                    {fieldState.error && (
+                        <FieldError>
+                            Selecciona una ocupación
+                        </FieldError>
+                    )}
+                </Field>
+            )}
+        />
+    )
 }

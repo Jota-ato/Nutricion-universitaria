@@ -3,199 +3,106 @@ import { useOnboardingStore } from "@/stores/useOnboardingStore"
 import { Button } from "@/components/ui/button"
 import {
     Field,
-    FieldDescription,
     FieldGroup,
-    FieldLabel,
     FieldLegend
 } from "@/components/ui/field"
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
+import StepsForm from "./StepsForm"
+import OcupationForm from "./OccupationForm"
+import DetailTrainingInfo from "./DetailTrainingInfoForm"
+import ActivityTypeForm from "./ActivityTypeForm"
 import { useState } from "react"
-
-function DetailTrainingInfo() {
-    return (
-        <FieldGroup>
-            <Field>
-                <FieldLabel htmlFor="dailySteps">
-                    Sesiones / semana
-                </FieldLabel>
-                <Input
-                    type="number"
-                    id="number"
-                />
-            </Field>
-            <Field>
-                <FieldLabel htmlFor="dailySteps">
-                    Duración por sesion
-                </FieldLabel>
-                <Input
-                    type="number"
-                    id="number"
-                    placeholder="en minutos"
-                />
-            </Field>
-        </FieldGroup>
-    )
-}
-
-function OcupationForm() {
-    return (
-        <Field>
-            <FieldLabel htmlFor="dailySteps">
-                ¿Cómo es tu estilo de vida?
-            </FieldLabel>
-            <Select defaultValue="">
-                <SelectTrigger>
-                    <SelectValue placeholder="Sedentario, moderado o muy activo" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem
-                            value="sedentary"
-                        >
-                            Mayormente sentado - (ejem. Oficinista)
-                        </SelectItem>
-                        <SelectItem
-                            value="light"
-                        >
-                            Ligeramente activo - (ejem. Estudiante, Maestro) 
-                        </SelectItem>
-                        <SelectItem
-                            value="moderate"
-                        >
-                            Moderadamente activo - (ejem. Construcción, Mesero)
-                        </SelectItem>
-                        <SelectItem
-                            value="heavy"
-                        >
-                            Muy activo - (ejem. Granjero, Minero)
-                        </SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </Field>
-    )
-}
-
-function StepsForm() {
-    return (
-        <Field className="gap-1">
-            <FieldLabel htmlFor="dailySteps">
-                ¿Cuántos pasos das a diario?
-            </FieldLabel>
-            <FieldDescription className="mb-2">
-                En caso de que no sepas da una aproximación, 1 paso ~0.0008km
-            </FieldDescription>
-            <Input
-                type="number"
-                id="number"
-            />
-        </Field>
-    )
-}
-
-function ActivityTypeForm() {
-    const [doesActivity, setDoesActivity] = useState(false);
-
-    const handleChange = (value: string) => setDoesActivity(value === 'yes')
-
-    return (
-        <Field>
-            <FieldLabel htmlFor="dailySteps">
-                ¿Realizas ejercicio físico?
-            </FieldLabel>
-            <Select defaultValue="" onValueChange={handleChange}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Si/no" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem
-                            value="yes"
-                        >
-                            Si
-                        </SelectItem>
-                        <SelectItem
-                            value="no"
-                        >
-                            No
-                        </SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-            {doesActivity && (
-                <Field>
-                    <FieldLabel>
-                        ¿Cón qué intensidad realizas actividad?
-                    </FieldLabel>
-                    <Select defaultValue="">
-                        <SelectTrigger>
-                            <SelectValue placeholder="Alta, media o baja" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem
-                                    value="low"
-                                >
-                                    Baja - (ejem. Caminata, Yoga ligero, Estiramientos)
-                                </SelectItem>
-                                <SelectItem
-                                    value="medium"
-                                >
-                                    Media - (ejem. Ciclismo, Deportes recreativos, Trote)
-                                </SelectItem>
-                                <SelectItem
-                                    value="high"
-                                >
-                                    Alta - (ejem. Pesas, HIIT, Deportes altamente competitivos)
-                                </SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                </Field>
-            )}
-        </Field>
-    )
-}
+import { useForm } from "react-hook-form"
+import { type StepActivityValues, stepActivitySchema } from "../schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Intensity, Occupation } from "@/features/calc"
+import { AnimatePresence, motion } from "framer-motion"
 
 export default function StepActivity() {
     const setStep = useOnboardingStore(state => state.setStep);
+    const updateFormData = useOnboardingStore(state => state.updateFormData);
     const [localStep, setLocalStep] = useState(1);
 
-    const handleClick = () => {
+    const variants = {
+        enter: { x: 20, opacity: 0 },
+        center: { x: 0, opacity: 1 },
+        exit: { x: -20, opacity: 0 }
+    };
+
+    const form = useForm<StepActivityValues>({
+        resolver: zodResolver(stepActivitySchema),
+        defaultValues: {
+            dailySteps: 0,
+            hasActivity: false,
+            occupation: '' as Occupation,
+            durationPerSession: 0,
+            sessionsPerWeek: 0,
+            trainingIntensity: '' as Intensity
+        }
+    })
+    const doesActivity = form.watch("hasActivity");
+
+    const onNextStep = async () => {
+        const fieldsByStep: Record<number, (keyof StepActivityValues)[]> = {
+            1: ["occupation"],
+            2: ["dailySteps"],
+            3: ["hasActivity"],
+            4: ["sessionsPerWeek", "durationPerSession", "trainingIntensity"],
+        };
+
+        const isValid = await form.trigger(fieldsByStep[localStep]);
+        if (!isValid) return;
+
+        if (localStep === 3 && !doesActivity) {
+            const { dailySteps, occupation } = form.getValues();
+            updateFormData({ activityData: { dailySteps, occupation, durationPerSession: 0, sessionsPerWeek: 0, trainingIntensity: 'low' } });
+            setStep(3);
+            return;
+        }
+
         if (localStep < 4) {
             setLocalStep(step => step + 1);
         } else {
+            const data = form.getValues();
+            const { dailySteps, occupation, durationPerSession, sessionsPerWeek, trainingIntensity } = data;
+            updateFormData({ activityData: { dailySteps, occupation, durationPerSession, sessionsPerWeek, trainingIntensity } });
             setStep(3);
         }
-    }
+    };
+
 
     return (
-        <FieldGroup className="gap-1">
-            <FieldLegend>
-                Ahora veamos que tan activo eres
-            </FieldLegend>
-            <FieldGroup>
-                {localStep === 1 && <OcupationForm />}
-                {localStep === 2 && <StepsForm />}
-                {localStep === 3 && <ActivityTypeForm />}
-                {localStep === 4 && <DetailTrainingInfo />}
+        <AnimatePresence>
+            <FieldGroup className="gap-1">
+                <FieldLegend>
+                    Ahora veamos que tan activo eres
+                </FieldLegend>
+                <FieldGroup>
+                    <motion.div
+                        key={localStep}
+                        variants={variants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{
+                            x: { type: "spring", stiffness: 300, damping: 30 },
+                            opacity: { duration: 0.2 }
+                        }}
+                    >
+                    {localStep === 1 && <OcupationForm form={form} />}
+                    {localStep === 2 && <StepsForm form={form} />}
+                    {localStep === 3 && <ActivityTypeForm form={form} />}
+                    {(localStep === 4 && doesActivity) && <DetailTrainingInfo form={form} />}
+                </motion.div>
                 <Field>
                     <Button
-                        onClick={handleClick}
+                        onClick={onNextStep}
                         className="cursor-pointer"
                     >
-                        {localStep < 5 ? 'siguiente' : 'continuar'}
+                        {(localStep < 4 && !(localStep === 3 && !doesActivity)) ? 'siguiente' : 'continuar'}
                     </Button>
                 </Field>
             </FieldGroup>
         </FieldGroup>
+        </AnimatePresence >
     )
 }

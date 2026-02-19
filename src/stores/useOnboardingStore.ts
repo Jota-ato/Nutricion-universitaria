@@ -14,8 +14,8 @@ interface OnboardingState {
         activityData: {
             dailySteps: number,
             occupation: Occupation,
-            trainingDays: number,
-            sesionDuration: number,
+            sessionsPerWeek: number,
+            durationPerSession: number,
             trainingIntensity: Intensity
         }
     };
@@ -36,8 +36,8 @@ export const useOnboardingStore = create<OnboardingState>()(
                 },
                 activityData: {
                     dailySteps: 0,
-                    trainingDays: 0,
-                    sesionDuration: 0,
+                    sessionsPerWeek: 0,
+                    durationPerSession: 0,
                     occupation: '' as Occupation,
                     trainingIntensity: '' as Intensity
                 }
