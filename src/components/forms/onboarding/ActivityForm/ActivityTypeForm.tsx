@@ -13,9 +13,9 @@ import {
     FieldError
 } from "@/components/ui/field"
 import { Controller } from "react-hook-form"
-import type { FormType } from "../schemas";
+import type { ActivityFormType } from "../../schemas" 
 
-export default function ActivityTypeForm({ form }: { form: FormType }) {
+export default function ActivityTypeForm({ form }: { form: ActivityFormType }) {
     const doesActivity = form.watch("hasActivity");
 
     return (

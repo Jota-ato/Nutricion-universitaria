@@ -12,12 +12,12 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Controller } from "react-hook-form"
-import type { FormType } from "../schemas"
+import type { StepToGoalFormType } from "../../schemas"
 
-export default function OcupationForm({ form }: { form: FormType }) {
+export default function OcupationForm({ form }: { form: StepToGoalFormType }) {
     return (
         <Controller
-            name="occupation"
+            name="goal"
             control={form.control}
             render={({ field, fieldState }) => (
                 <Field>
@@ -28,29 +28,26 @@ export default function OcupationForm({ form }: { form: FormType }) {
                         value={field.value}
                         onValueChange={field.onChange}
                     >
-                        <SelectTrigger id="occupation" onBlur={field.onBlur}>
-                            <SelectValue placeholder="Sedentario, moderado o muy activo" />
+                        <SelectTrigger id="goal" onBlur={field.onBlur}>
+                            <SelectValue placeholder="Perder peso - Mantener peso - Ganar peso" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectItem value="sedentary">
-                                    Mayormente sentado - (ejem. Oficinista)
+                                <SelectItem value="loss">
+                                    Perder peso
                                 </SelectItem>
-                                <SelectItem value="light">
-                                    Ligeramente activo - (ejem. Estudiante, Maestro)
+                                <SelectItem value="maintenance">
+                                    Mantener peso
                                 </SelectItem>
-                                <SelectItem value="moderate">
-                                    Moderadamente activo - (ejem. Construcción, Mesero)
-                                </SelectItem>
-                                <SelectItem value="heavy">
-                                    Muy activo - (ejem. Granjero, Minero)
+                                <SelectItem value="gain">
+                                    Ganar peso
                                 </SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
                     {fieldState.error && (
                         <FieldError>
-                            Selecciona una ocupación
+                            Selecciona un objetivo
                         </FieldError>
                     )}
                 </Field>

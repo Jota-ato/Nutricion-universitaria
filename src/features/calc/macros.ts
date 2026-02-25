@@ -104,6 +104,25 @@ export function calculateDynamicMacros(
     tdee: number,
     data: GoalData
 ): MacroResult {
+
+    if (data.goal === 'maintenance') {
+        const targetCalories = tdee;
+
+        const protein = data.currentWeight * MACRO_RATIO.proteinPerKg;
+        const fats = data.currentWeight * MACRO_RATIO.fatPerKg;
+        const carbs = (targetCalories - (protein * KCAL_PER_PROTEIN + fats * KCAL_PER_FAT)) / KCAL_PER_CARB;
+
+        return {
+            calories: Math.round(targetCalories),
+            protein: Math.round(protein),
+            fats: Math.round(fats),
+            carbs: Math.round(carbs),
+            dailyDeficitOrSurplus: 0,
+            isSafe: true,
+            message: 'Mantenimiento de peso',
+        };
+    }
+
     const { currentWeight, targetWeight, weeksToGoal } = data;
 
     const weightDiff = Math.abs(currentWeight - targetWeight);

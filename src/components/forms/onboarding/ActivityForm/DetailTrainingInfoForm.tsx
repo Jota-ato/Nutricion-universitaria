@@ -5,9 +5,9 @@ import {
     FieldError
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import type { FormType } from "../schemas"
+import type { ActivityFormType } from "../../schemas"
 
-export default function DetailTrainingInfo({ form }: { form: FormType }) {
+export default function DetailTrainingInfo({ form }: { form: ActivityFormType }) {
     const { register, formState: { errors } } = form;
 
     return (

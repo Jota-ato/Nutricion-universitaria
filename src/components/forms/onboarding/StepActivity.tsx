@@ -6,19 +6,19 @@ import {
     FieldGroup,
     FieldLegend
 } from "@/components/ui/field"
-import StepsForm from "./StepsForm"
-import OcupationForm from "./OccupationForm"
-import DetailTrainingInfo from "./DetailTrainingInfoForm"
-import ActivityTypeForm from "./ActivityTypeForm"
+import StepsForm from "./ActivityForm/StepsForm"
+import OcupationForm from "./ActivityForm/OccupationForm"
+import DetailTrainingInfo from "./ActivityForm/DetailTrainingInfoForm"
+import ActivityTypeForm from "./ActivityForm/ActivityTypeForm"
 import { useState } from "react"
 import { useForm, useWatch } from "react-hook-form"
 import { type StepActivityValues, stepActivitySchema } from "../schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Intensity, Occupation } from "@/features/calc"
 import { AnimatePresence, motion } from "framer-motion"
 
 export default function StepActivity() {
     const setStep = useOnboardingStore(state => state.setStep);
+    const activityData = useOnboardingStore(state => state.formData.activityData)
     const updateFormData = useOnboardingStore(state => state.updateFormData);
     const [localStep, setLocalStep] = useState(1);
 
@@ -30,14 +30,8 @@ export default function StepActivity() {
 
     const form = useForm<StepActivityValues>({
         resolver: zodResolver(stepActivitySchema),
-        defaultValues: {
-            dailySteps: 0,
-            hasActivity: false,
-            occupation: '' as Occupation,
-            durationPerSession: 0,
-            sessionsPerWeek: 0,
-            trainingIntensity: '' as Intensity
-        }
+        defaultValues: activityData,
+        mode: "onChange"
     })
     const doesActivity = useWatch({
         control: form.control,
@@ -72,6 +66,9 @@ export default function StepActivity() {
         }
     };
 
+    const returnStep = () => {
+        setLocalStep(step => step - 1)
+    }
 
     return (
         <AnimatePresence>
@@ -96,9 +93,21 @@ export default function StepActivity() {
                         {localStep === 3 && <ActivityTypeForm form={form} />}
                         {(localStep === 4 && doesActivity) && <DetailTrainingInfo form={form} />}
                     </motion.div>
-                    <Field>
+                    <Field
+                        className={`${localStep > 1 ? "grid grid-cols-2 gap-4" : ""}`}
+                    >
+                        {localStep > 1 && (
+                            <Button
+                                className="cursor-pointer"
+                                type="button"
+                                onClick={returnStep}
+                            >
+                                regresar
+                            </Button>
+                        )}
                         <Button
                             onClick={onNextStep}
+                            type="button"
                             className="cursor-pointer"
                         >
                             {(localStep < 4 && !(localStep === 3 && !doesActivity)) ? 'siguiente' : 'continuar'}

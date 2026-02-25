@@ -1,22 +1,27 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Intensity, Occupation } from '@/features/calc';
+import type { Goal, Intensity, Occupation } from '@/features/calc';
 
 interface OnboardingState {
     step: number;
     formData: {
         basicData: {
             name: string;
-            age: number;
-            height: number;
-            weight: number;
+            age: number | "";
+            height: number | "";
+            weight: number | "";
         },
         activityData: {
-            dailySteps: number,
+            dailySteps: number | "",
             occupation: Occupation,
-            sessionsPerWeek: number,
-            durationPerSession: number,
+            sessionsPerWeek: number | "",
+            durationPerSession: number | "",
             trainingIntensity: Intensity
+        }
+        goalData: {
+            goal: Goal,
+            weeksToTarget?: number,
+            targetWeight?: number
         }
     };
     setStep: (step: number) => void;
@@ -30,16 +35,21 @@ export const useOnboardingStore = create<OnboardingState>()(
             formData: {
                 basicData: {
                     name: '',
-                    age: 0,
-                    height: 0,
-                    weight: 0
+                    age: "",
+                    height: "",
+                    weight: ""
                 },
                 activityData: {
-                    dailySteps: 0,
-                    sessionsPerWeek: 0,
-                    durationPerSession: 0,
+                    dailySteps: "",
+                    sessionsPerWeek: "",
+                    durationPerSession: "",
                     occupation: '' as Occupation,
                     trainingIntensity: '' as Intensity
+                },
+                goalData: {
+                    goal: "" as Goal,
+                    targetWeight: undefined,
+                    weeksToTarget: undefined
                 }
             },
             setStep: (step) => set({ step }),

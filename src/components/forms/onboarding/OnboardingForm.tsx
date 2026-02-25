@@ -8,7 +8,6 @@ import StepIndicator from "./StepIndicator";
 export default function OnBoardingForm() {
     const step = useOnboardingStore(state => state.step);
 
-    // Variantes para la animación de deslizamiento
     const variants = {
         enter: { x: 20, opacity: 0 },
         center: { x: 0, opacity: 1 },
@@ -16,14 +15,13 @@ export default function OnBoardingForm() {
     };
 
     return (
-        // Añadimos overflow-hidden para que el contenido no "se salga" del borde al deslizar
         <Card className="px-4 max-w-480 w-[90%] mx-auto overflow-hidden"> 
             <StepIndicator/>
             <form onSubmit={e => e.preventDefault()}>
                 <fieldset className="relative">
                     <AnimatePresence mode="wait">
                         <motion.div
-                            key={step} // Clave vital para que Framer sepa qué paso animar
+                            key={step}
                             variants={variants}
                             initial="enter"
                             animate="center"

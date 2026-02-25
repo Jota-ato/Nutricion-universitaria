@@ -16,10 +16,10 @@ import { useOnboardingStore } from "@/stores/useOnboardingStore"
 
 export default function StepBasic() {
 
-    const { formData, updateFormData, setStep } = useOnboardingStore();
+    const { formData: {basicData}, updateFormData, setStep } = useOnboardingStore();
     const form = useForm<StepBasicValues>({
         resolver: zodResolver(stepBasicSchema),
-        defaultValues: formData.basicData,
+        defaultValues: basicData,
         mode: "onChange"
     });
     const errors = form.formState.errors;

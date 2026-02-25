@@ -5,10 +5,10 @@ import {
     FieldLabel
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { FormType } from "../schemas"
+import { ActivityFormType } from "../../schemas"
 import { Controller } from "react-hook-form"
 
-export default function StepsForm({ form }: { form: FormType }) {
+export default function StepsForm({ form }: { form: ActivityFormType }) {
     return (
         <Controller
             name="dailySteps"
@@ -19,7 +19,7 @@ export default function StepsForm({ form }: { form: FormType }) {
                         ¿Cuántos pasos das a diario?
                     </FieldLabel>
                     <FieldDescription className="mb-2">
-                        En caso de que no sepas da una aproximación, 1 paso ~0.0008km
+                        En caso de que no sepas da una aproximación, 1km ~1500 pasos
                     </FieldDescription>
                     <Input
                         {...field}
