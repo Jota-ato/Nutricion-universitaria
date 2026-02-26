@@ -15,6 +15,7 @@ import { useForm, useWatch } from "react-hook-form"
 import { type StepActivityValues, stepActivitySchema } from "../schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AnimatePresence, motion } from "framer-motion"
+import { Intensity, Occupation } from "@/features/calc"
 
 export default function StepActivity() {
     const setStep = useOnboardingStore(state => state.setStep);
@@ -30,7 +31,14 @@ export default function StepActivity() {
 
     const form = useForm<StepActivityValues>({
         resolver: zodResolver(stepActivitySchema),
-        defaultValues: activityData,
+        defaultValues: {
+            dailySteps: "",
+            durationPerSession: "",
+            hasActivity: false,
+            occupation: "" as Occupation,
+            sessionsPerWeek: "",
+            trainingIntensity: "" as Intensity
+        },
         mode: "onChange"
     })
     const doesActivity = useWatch({

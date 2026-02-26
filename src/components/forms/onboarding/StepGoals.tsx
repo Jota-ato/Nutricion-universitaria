@@ -3,11 +3,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
     Field,
-    FieldError,
     FieldGroup,
-    FieldLabel,
     FieldLegend,
-    FieldSeparator
 } from "@/components/ui/field"
 import GoalSelect from "./GoalForm/GoalSelect"
 import { useForm, useWatch } from "react-hook-form"
@@ -15,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { stepGoalSchema, StepToGoalType } from "../schemas"
 import { useOnboardingStore } from "@/stores/useOnboardingStore"
 import GoalDetail from "@/components/forms/onboarding/GoalForm/GoalDetail";
+import { AnimatePresence, motion } from "framer-motion"
 
 export default function StepGoals() {
 
@@ -23,9 +21,16 @@ export default function StepGoals() {
     const setStep = useOnboardingStore(state => state.setStep);
     const [localStep, setLocalStep] = useState(1);
 
+    const variants = {
+        enter: { x: 20, opacity: 0 },
+        center: { x: 0, opacity: 1 },
+        exit: { x: -20, opacity: 0 }
+    };
+
     const form = useForm<StepToGoalType>({
         resolver: zodResolver(stepGoalSchema),
         defaultValues: goalData,
+        mode: "onChange"
     })
 
     const goal = useWatch({
@@ -59,35 +64,51 @@ export default function StepGoals() {
     const returnStep = () => setLocalStep(step => step - 1);
 
     return (
-        <FieldGroup className="gap-1">
-            <FieldLegend>
-                Ahora conozcamos tus metas
-            </FieldLegend>
-            {localStep === 1 && (
-                <GoalSelect form={form} />
-            )}
-            {(localStep === 2 && goal !== 'maintenance') && <GoalDetail form={form}/>}
-
-            <Field
-                className={`${localStep > 1 ? "grid grid-cols-2 gap-4" : ""} mt-3`}
-            >
-                {localStep > 1 && (
-                    <Button
-                        className="cursor-pointer"
-                        type="button"
-                        onClick={returnStep}
+        <AnimatePresence>
+            <FieldGroup className="gap-1">
+                <FieldLegend>
+                    Ahora conozcamos tus metas
+                </FieldLegend>
+                <FieldGroup>
+                    <motion.div
+                        key={localStep}
+                        variants={variants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{
+                            x: { type: "spring", stiffness: 300, damping: 30 },
+                            opacity: { duration: 0.2 }
+                        }}
                     >
-                        regresar
-                    </Button>
-                )}
-                <Button
-                    onClick={onNextStep}
-                    type="button"
-                    className="cursor-pointer"
+                        {localStep === 1 && (
+                            <GoalSelect form={form} />
+                        )}
+                        {(localStep === 2 && goal !== 'maintenance') && <GoalDetail form={form} />}
+                    </motion.div>
+                </FieldGroup>
+
+                <Field
+                    className={`${localStep > 1 ? "grid grid-cols-2 gap-4" : ""} mt-3`}
                 >
-                    {(localStep < 2 && !(localStep === 1 && (goal === 'maintenance'))) ? 'siguiente' : 'terminar'}
-                </Button>
-            </Field>
-        </FieldGroup>
+                    {localStep > 1 && (
+                        <Button
+                            className="cursor-pointer"
+                            type="button"
+                            onClick={returnStep}
+                        >
+                            regresar
+                        </Button>
+                    )}
+                    <Button
+                        onClick={onNextStep}
+                        type="button"
+                        className="cursor-pointer"
+                    >
+                        {(localStep < 2 && !(localStep === 1 && (goal === 'maintenance'))) ? 'siguiente' : 'terminar'}
+                    </Button>
+                </Field>
+            </FieldGroup>
+        </AnimatePresence>
     )
 }

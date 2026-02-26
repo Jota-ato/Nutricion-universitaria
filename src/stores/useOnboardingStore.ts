@@ -20,8 +20,8 @@ interface OnboardingState {
         }
         goalData: {
             goal: Goal,
-            weeksToTarget?: number,
-            targetWeight?: number
+            weeksToGoal: number | "",
+            targetWeight: number | ""
         }
     };
     setStep: (step: number) => void;
@@ -48,8 +48,8 @@ export const useOnboardingStore = create<OnboardingState>()(
                 },
                 goalData: {
                     goal: "" as Goal,
-                    targetWeight: undefined,
-                    weeksToTarget: undefined
+                    targetWeight: "",
+                    weeksToTarget: ""
                 }
             },
             setStep: (step) => set({ step }),

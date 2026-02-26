@@ -19,6 +19,7 @@ export default function DetailTrainingInfo({ form }: { form: ActivityFormType })
                 <Input
                     type="number"
                     id="sessionsPerWeek"
+                    placeholder="min 1"
                     {...register("sessionsPerWeek")}
                 />
                 {errors.sessionsPerWeek && (

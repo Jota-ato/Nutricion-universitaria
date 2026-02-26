@@ -72,7 +72,7 @@ export default function ActivityTypeForm({ form }: { form: ActivityFormType }) {
                                         <SelectItem value="low">
                                             Baja - (ejem. Caminata, Yoga ligero, Estiramientos)
                                         </SelectItem>
-                                        <SelectItem value="medium">
+                                        <SelectItem value="moderate">
                                             Media - (ejem. Ciclismo, Deportes recreativos, Trote)
                                         </SelectItem>
                                         <SelectItem value="high">

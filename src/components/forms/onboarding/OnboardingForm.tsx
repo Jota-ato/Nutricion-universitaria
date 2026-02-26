@@ -34,6 +34,7 @@ export default function OnBoardingForm() {
                             {step === 1 && <StepBasics />}
                             {step === 2 && <StepActivity />}
                             {step === 3 && <StepGoals />}
+                            {step === 4 && <StepGoals />}
                         </motion.div>
                     </AnimatePresence>
                 </fieldset>

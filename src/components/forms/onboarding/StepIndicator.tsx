@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function StepIndicator() {
     const step = useOnboardingStore(state => state.step);
-    const totalSteps = 3;
+    const totalSteps = 4;
     const progress = (step / totalSteps) * 100;
 
     return (

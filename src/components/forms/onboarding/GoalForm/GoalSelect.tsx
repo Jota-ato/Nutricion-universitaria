@@ -22,7 +22,7 @@ export default function OcupationForm({ form }: { form: StepToGoalFormType }) {
             render={({ field, fieldState }) => (
                 <Field>
                     <FieldLabel htmlFor="occupation">
-                        ¿Cómo es tu estilo de vida?
+                        ¿Cuál es tu objetivo?
                     </FieldLabel>
                     <Select
                         value={field.value}
