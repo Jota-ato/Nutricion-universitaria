@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { UseFormReturn } from "react-hook-form";
-import type { Occupation, Intensity, Goal } from '@/features/calc';
+import type { Occupation, Intensity, Goal, Sex } from '@/features/calc';
 
 const occupationValues: [Occupation, ...Occupation[]] = [
     "sedentary",
@@ -21,12 +21,20 @@ const intensityValues: [Intensity, ...Intensity[]] = [
     "moderate"
 ];
 
+const sexValues: [Sex, ...Sex[]] = [
+    "male",
+    "female"
+];
+
 export const stepBasicSchema = z.object({
     name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
     age: z.union([
         z.literal(""),
         z.coerce.number().min(12, "Debes tener al menos 12 años").max(100),
     ]),
+    sex: z.enum(sexValues, {
+        errorMap: () => ({ message: "Selecciona tu sexo" }),
+    }),
     height: z.union([
         z.literal(""),
         z.coerce.number().min(100, "Altura mínima 100cm").max(250),
@@ -65,7 +73,7 @@ export type ActivityFormType = UseFormReturn<{
     occupation: Occupation;
     trainingIntensity: Intensity;
     dailySteps: number | "";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }, any, undefined>
 
 export const stepGoalSchema = z.object({
@@ -86,5 +94,5 @@ export type StepToGoalFormType =
         goal: Goal;
         targetWeight: number | "";
         weeksToGoal: number | "";
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }, any, undefined>

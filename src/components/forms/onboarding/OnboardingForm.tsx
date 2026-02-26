@@ -4,6 +4,7 @@ import { StepActivity, StepBasics, StepGoals } from ".";
 import { Card } from "@/components/ui/card";
 import { AnimatePresence, motion } from "framer-motion";
 import StepIndicator from "./StepIndicator";
+import RegistrationForm from "./RegistrationForm";
 
 export default function OnBoardingForm() {
     const step = useOnboardingStore(state => state.step);
@@ -34,7 +35,7 @@ export default function OnBoardingForm() {
                             {step === 1 && <StepBasics />}
                             {step === 2 && <StepActivity />}
                             {step === 3 && <StepGoals />}
-                            {step === 4 && <StepGoals />}
+                            {step === 4 && <RegistrationForm />}
                         </motion.div>
                     </AnimatePresence>
                 </fieldset>

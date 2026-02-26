@@ -8,29 +8,39 @@ import {
     FieldLegend,
     FieldSeparator
 } from "@/components/ui/field"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { Controller } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { stepBasicSchema, type StepBasicValues } from "../schemas"
 import { useOnboardingStore } from "@/stores/useOnboardingStore"
+import { Sex } from "@/features/calc"
 
 export default function StepBasic() {
 
-    const { formData: {basicData}, updateFormData, setStep } = useOnboardingStore();
+    const { updateFormData, setStep } = useOnboardingStore();
     const form = useForm<StepBasicValues>({
         resolver: zodResolver(stepBasicSchema),
         defaultValues: {
             name: "",
             age: "",
             height: "",
-            weight: ""
+            weight: "",
+            sex: "" as Sex
         },
         mode: "onChange"
     });
     const errors = form.formState.errors;
 
     const onNextStep = (data: StepBasicValues) => {
-        updateFormData({basicData: {name: data.name, age: data.age, height: data.height, weight: data.weight}});
+        updateFormData({ basicData: data });
         setStep(2);
     };
 
@@ -52,6 +62,30 @@ export default function StepBasic() {
                     />
                     {errors.name && (
                         <FieldError>El nombre es requerido</FieldError>
+                    )}
+                </Field>
+                <Field>
+                    <FieldLabel htmlFor="sex">Sexo</FieldLabel>
+                    <Controller
+                        control={form.control}
+                        name="sex"
+                        render={({ field }) => (
+                            <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                            >
+                                <SelectTrigger id="sex" className="w-full">
+                                    <SelectValue placeholder="Selecciona tu sexo" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="male">Masculino</SelectItem>
+                                    <SelectItem value="female">Femenino</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                    {errors.sex && (
+                        <FieldError>{errors.sex.message}</FieldError>
                     )}
                 </Field>
                 <Field>

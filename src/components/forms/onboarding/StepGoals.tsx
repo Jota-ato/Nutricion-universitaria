@@ -13,10 +13,11 @@ import { stepGoalSchema, StepToGoalType } from "../schemas"
 import { useOnboardingStore } from "@/stores/useOnboardingStore"
 import GoalDetail from "@/components/forms/onboarding/GoalForm/GoalDetail";
 import { AnimatePresence, motion } from "framer-motion"
+import { Goal } from "@/features/calc"
 
 export default function StepGoals() {
 
-    const goalData = useOnboardingStore(state => state.formData.goalData);
+    const calculateStats = useOnboardingStore(state => state.calculateStats);
     const updateFormData = useOnboardingStore(state => state.updateFormData);
     const setStep = useOnboardingStore(state => state.setStep);
     const [localStep, setLocalStep] = useState(1);
@@ -29,7 +30,11 @@ export default function StepGoals() {
 
     const form = useForm<StepToGoalType>({
         resolver: zodResolver(stepGoalSchema),
-        defaultValues: goalData,
+        defaultValues: {
+            goal: "" as Goal,
+            targetWeight: "",
+            weeksToGoal: ""
+        },
         mode: "onChange"
     })
 
@@ -50,12 +55,14 @@ export default function StepGoals() {
         if (data.goal === "maintenance") {
             updateFormData({ goalData: data });
             setStep(4);
+            calculateStats();
             return;
         }
-        if (localStep < 3) {
+        if (localStep <= 2) {
             setLocalStep(step => step + 1);
         } else {
             updateFormData({ goalData: data });
+            calculateStats();
             setStep(4);
         }
 

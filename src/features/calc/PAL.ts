@@ -99,9 +99,9 @@ export function calculatePrecisePAL(data: ActivityData): number {
     pal += Math.min(stepsFactor, MAX_STEPS_FACTOR);
 
     const weeklyExerciseFactor =
-        data.trainingDays *
-        (data.sessionDuration / 60) *
-        INTENSITY_MAP[data.intensity];
+        data.sessionsPerWeek *
+        (data.durationPerSession / 60) *
+        INTENSITY_MAP[data.trainingIntensity];
     pal += weeklyExerciseFactor / 7;
 
     return parseFloat(pal.toFixed(3));
