@@ -65,7 +65,7 @@ export const useOnboardingStore = create<OnboardingState>()(
                 bmr: 0,
                 tdee: 0,
                 macros: {
-                    calories: 0, 
+                    calories: 0,
                     protein: 0,
                     carbs: 0,
                     fats: 0
@@ -74,17 +74,34 @@ export const useOnboardingStore = create<OnboardingState>()(
             setStep: (step) => set({ step }),
             updateFormData: (data) =>
                 set((state) => ({ formData: { ...state.formData, ...data } })),
+
             calculateStats: () => {
                 const { age, height, weight, sex } = get().formData.basicData;
                 const { dailySteps, durationPerSession, occupation, sessionsPerWeek, trainingIntensity } = get().formData.activityData;
                 const { goal, targetWeight, weeksToGoal } = get().formData.goalData;
-                if (typeof height !== 'number' || typeof weight !== 'number' || typeof age !== 'number') return;
+
+                console.log(get().formData);
+                if (!sex || typeof height !== 'number' || typeof weight !== 'number' || typeof age !== 'number') return;
                 if (typeof durationPerSession !== 'number' || typeof sessionsPerWeek !== 'number' || typeof dailySteps !== 'number') return;
-                if (typeof targetWeight !== 'number' || typeof weeksToGoal !== 'number') return;
+
+                console.log('First filter passed');
+                if (goal !== 'maintenance') {
+                    if (typeof targetWeight !== 'number' || typeof weeksToGoal !== 'number') return;
+                }
+                console.log('Second filter passed');
+
                 const bmr = calculateBMR({ sex, age, height, weight });
                 const pal = calculatePrecisePAL({ dailySteps, trainingIntensity, durationPerSession, occupation, sessionsPerWeek });
                 const tdee = calculateTDEE(bmr, pal);
-                const macros = calculateDynamicMacros(tdee, { goal, currentWeight: weight, targetWeight, weeksToGoal });
+
+                const macros = calculateDynamicMacros(tdee, {
+                    goal,
+                    currentWeight: weight,
+                    targetWeight: goal === 'maintenance' ? weight : (targetWeight as number),
+                    weeksToGoal: goal === 'maintenance' ? 1 : (weeksToGoal as number)
+                });
+                console.log({bmr, tdee, macros})
+
                 set(() => ({ calculatedStats: { bmr, tdee, macros } }));
             }
         }),

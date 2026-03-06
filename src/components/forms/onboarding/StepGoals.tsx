@@ -58,7 +58,7 @@ export default function StepGoals() {
             calculateStats();
             return;
         }
-        if (localStep <= 2) {
+        if (localStep < 2) {
             setLocalStep(step => step + 1);
         } else {
             updateFormData({ goalData: data });

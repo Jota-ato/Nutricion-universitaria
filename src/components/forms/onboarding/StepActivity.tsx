@@ -58,7 +58,7 @@ export default function StepActivity() {
         if (!isValid) return;
 
         if (localStep === 3 && !doesActivity) {
-            const { dailySteps, occupation } = form.getValues();
+            const { dailySteps, occupation } = stepActivitySchema.parse(form.getValues());
             updateFormData({ activityData: { dailySteps, occupation, durationPerSession: 0, sessionsPerWeek: 0, trainingIntensity: 'low' } });
             setStep(3);
             return;
@@ -67,7 +67,7 @@ export default function StepActivity() {
         if (localStep < 4) {
             setLocalStep(step => step + 1);
         } else {
-            const data = form.getValues();
+            const data = stepActivitySchema.parse(form.getValues());
             const { dailySteps, occupation, durationPerSession, sessionsPerWeek, trainingIntensity } = data;
             updateFormData({ activityData: { dailySteps, occupation, durationPerSession, sessionsPerWeek, trainingIntensity } });
             setStep(3);

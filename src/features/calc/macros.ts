@@ -25,7 +25,7 @@ const MACRO_RATIO = {
     /** g of protein per kg of body weight */
     proteinPerKg: 2.0,
     /** g of fat per kg of body weight */
-    fatPerKg: 0.8,
+    fatPerKg: 1,
 } as const;
 
 /** Kilocalories per gram of protein (Atwater factor) */

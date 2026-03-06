@@ -1,5 +1,8 @@
 'use client'
-import { Field, FieldGroup, FieldLegend } from "@/components/ui/field";
+import {
+    FieldGroup,
+    FieldLegend
+} from "@/components/ui/field";
 import { useOnboardingStore } from "@/stores/useOnboardingStore";
 
 export default function RegistrationForm() {
@@ -12,7 +15,6 @@ export default function RegistrationForm() {
                 Como último paso crea tu cuenta
             </FieldLegend>
             <p>Tu metabolismo basal es: {calculatedStats.bmr}kcal/día</p>
-            <p>Tu gasto energético total es: {calculatedStats.tdee}kcal/día</p>
             <p>Debes consumir: {calculatedStats.macros.calories}kcal/día</p>
             <p>Debes consumir: {calculatedStats.macros.protein}g de proteína</p>
             <p>Debes consumir: {calculatedStats.macros.carbs}g de carbohidratos</p>
