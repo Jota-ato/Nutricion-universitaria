@@ -15,11 +15,10 @@ const goalValues: [Goal, ...Goal[]] = [
     "maintenance"
 ]
 
-const intensityValues: [Intensity, ...Intensity[], ""] = [
+const intensityValues: [Intensity, ...Intensity[]] = [
     "high",
     "low",
     "moderate",
-    ""
 ];
 
 const sexValues: [Sex, ...Sex[]] = [
