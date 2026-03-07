@@ -30,12 +30,12 @@ export default function StepBasic() {
         resolver: zodResolver(stepBasicSchema),
         defaultValues: {
             name: "",
-            age: "",
+            age: "",    
             height: "",
             weight: "",
             sex: "" as Sex
         },
-        mode: "onChange"
+        mode: "onSubmit"
     });
     const errors = form.formState.errors;
 

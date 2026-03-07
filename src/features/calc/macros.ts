@@ -108,7 +108,7 @@ export function calculateDynamicMacros(
     if (data.goal === 'maintenance') {
         const targetCalories = tdee;
 
-        const protein = data.currentWeight * MACRO_RATIO.proteinPerKg;
+        const protein = (data.currentWeight * MACRO_RATIO.proteinPerKg);
         const fats = data.currentWeight * MACRO_RATIO.fatPerKg;
         const carbs = (targetCalories - (protein * KCAL_PER_PROTEIN + fats * KCAL_PER_FAT)) / KCAL_PER_CARB;
 

@@ -35,7 +35,6 @@ export default function RegistrationForm() {
                 <p>Debes consumir: {calculatedStats.macros.fats}g de grasas</p>
             </div>
 
-            {/* Botón de Google */}
             <Button
                 onClick={handleGoogleLogin}
                 variant="outline"

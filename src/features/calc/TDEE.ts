@@ -42,5 +42,5 @@
  * @see {@link https://www.fao.org/3/y5686e/y5686e.pdf | FAO/WHO/UNU Human Energy Requirements}
  */
 export function calculateTDEE(bmr: number, pal: number): number {
-    return bmr * pal;
+    return Math.round(bmr * pal);
 }
