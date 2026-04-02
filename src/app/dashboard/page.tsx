@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { Spinner } from "@/components/ui/spinner";
 
 export default function Dashboard() {
-    const { formData } = useOnboardingStore();
+    const { formData, calculatedStats } = useOnboardingStore();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -18,7 +18,8 @@ export default function Dashboard() {
                     method: 'POST',
                     body: JSON.stringify({
                         userId: user.id,
-                        profileData: formData.basicData
+                        profileData: formData.basicData,
+                        calculatedStats
                     })
                 });
                 // Opcional: Limpiar el store o marcar como completado
@@ -27,7 +28,7 @@ export default function Dashboard() {
         };
 
         syncProfile();
-    }, [formData]);
+    }, [formData, calculatedStats]);
 
     if (loading) return <Spinner />;
 

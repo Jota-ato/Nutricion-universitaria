@@ -6,9 +6,20 @@ const supabaseAdmin = createClient(
     process.env.NUTRICION_UNIVERSITARIA_SUPABASE_SERVICE_ROLE_KEY!
 )
 
+type calculatedStatsType = {
+    tdee: number
+    bmr: number
+    macrosDistribution: {
+        calories: number
+        protein: number
+        carbs: number
+        fat: SVGAnimatedNumberList
+    }
+}
+
 export async function POST(request: Request) {
     try {
-        const { userId, profileData }: { userId: string, profileData: formDataType } = await request.json();
+        const { userId, profileData, calculatedStats }: { userId: string, profileData: formDataType, calculatedStats: calculatedStatsType } = await request.json();
         const { basicData, activityData, goalData } = profileData;
 
         // 1. Registro en la tabla principal de Usuarios
@@ -56,6 +67,18 @@ export async function POST(request: Request) {
             });
         if (errorGoal) throw errorGoal;
 
+        const { error: errorMacros } = await supabaseAdmin
+            .from('macros_info')
+            .upsert({
+                tdee: calculatedStats.tdee,
+                bmr: calculatedStats.bmr,
+                calories: calculatedStats.macrosDistribution.calories,
+                carbs: calculatedStats.macrosDistribution.carbs,
+                protein: calculatedStats.macrosDistribution.protein,
+                fat: calculatedStats.macrosDistribution.fat,
+            })
+        if (errorMacros) throw errorMacros;
+        
         return Response.json({ success: true }, { status: 201 });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
