@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import type { Food, USDAFood, USDASearchResponse } from '@/app/types';
 import { USDA_NID } from '@/app/types';
 import { parseServing, getNutrient } from '@/app/helpers';
@@ -53,7 +52,7 @@ export function normalizeUSDA(food: USDAFood): Food | null {
     const { amount, unit } = parseServing(food.servingSize)
 
     return {
-        id: uuid(),
+        id: `USDA_${food.fdcId}`,
         name: food.description,
         brand: food.brandOwner ?? food.brandName ?? null,
         calories,

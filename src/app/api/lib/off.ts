@@ -1,6 +1,4 @@
-import { v4 as uuid } from 'uuid';
 import type { Food, OFFProduct, OFFSearchResponse } from '@/app/types';
-import { parseServing } from '@/app/helpers';
 
 /**
  * Fetches and normalizes food products from the Open Food Facts API.
@@ -43,20 +41,17 @@ export function normalizeOFF(product: OFFProduct): Food | null {
     const n = product.nutriments
 
     if (!product.product_name || !n?.["energy-kcal_100g"]) return null
-
-    const { amount, unit } = parseServing(product.serving_size)
-    const base_portion = product.serving_quantity ? product.serving_quantity : amount ? amount : 100;
     
     return {
-        id: uuid(),
+        id: `OFF_${product.code}`,
         name: product.product_name,
         brand: product.brands ?? null,
         calories: n["energy-kcal_100g"] ?? 0,
         protein: n["proteins_100g"] ?? 0,
         carbs: n["carbohydrates_100g"] ?? 0,
         fat: n["fat_100g"] ?? 0,
-        base_portion,
-        unit: product.serving_quantity ? 'g' : unit,
+        base_portion: 100,
+        unit: 'g',
         source: 'OFF'
     }
 }

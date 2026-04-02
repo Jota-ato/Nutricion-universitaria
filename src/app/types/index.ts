@@ -1,4 +1,10 @@
 
+/**
+ * External types
+ */
+
+
+
 export interface Food {
     id: string
     name: string
@@ -11,6 +17,8 @@ export interface Food {
     fat: number
     base_portion: number
 }
+
+// OFF
 
 export interface OFFProduct {
     code: string
@@ -29,7 +37,6 @@ export interface OFFNutriments {
     carbohydrates_100g?: number
     fat_100g?: number
 
-    // Micronutrientes (per 100g)
     fiber_100g?: number
     sugars_100g?: number
     sodium_100g?: number  // in g
@@ -47,6 +54,8 @@ export interface OFFSearchResponse {
     count: number
     page: number
 }
+
+// USDA
 
 export interface USDAFood {
     fdcId: number
@@ -72,7 +81,6 @@ export interface USDASearchResponse {
     totalPages: number
 }
 
-// IDs estables — más confiable que buscar por nombre
 export const USDA_NID = {
     // Macros
     CALORIES: 1008,
@@ -91,3 +99,7 @@ export const USDA_NID = {
     VITAMIN_C: 1162,
     VITAMIN_A: 1106,
 } as const
+
+// diary types
+
+export type mealType = 'breakfast' | 'lunch' | 'dinner' | 'snack'
