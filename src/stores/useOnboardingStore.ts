@@ -2,30 +2,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { calculateBMR, calculateDynamicMacros, calculatePrecisePAL, type Goal, type Intensity, type MacroDistribution, type Occupation, type Sex } from '@/features/calc';
 import { calculateTDEE } from '@/features/calc/TDEE';
+import { formDataType } from '@/app/types';
 
 interface OnboardingState {
     step: number;
-    formData: {
-        basicData: {
-            name: string;
-            age: number | "";
-            height: number | "";
-            weight: number | "";
-            sex: Sex
-        },
-        activityData: {
-            dailySteps: number | "",
-            occupation: Occupation,
-            sessionsPerWeek: number | "",
-            durationPerSession: number | "",
-            trainingIntensity: Intensity
-        }
-        goalData: {
-            goal: Goal,
-            weeksToGoal: number | "",
-            targetWeight: number | ""
-        }
-    };
+    formData: formDataType;
     calculatedStats: {
         bmr: number;
         tdee: number;

@@ -1,4 +1,4 @@
-
+import type { Sex, Goal, Intensity, Occupation } from "@/features/calc" 
 /**
  * External types
  */
@@ -103,3 +103,25 @@ export const USDA_NID = {
 // diary types
 
 export type mealType = 'breakfast' | 'lunch' | 'dinner' | 'snack'
+
+export interface formDataType {
+    basicData: {
+        name: string;
+        age: number | "";
+        height: number | "";
+        weight: number | "";
+        sex: Sex
+    },
+    activityData: {
+        dailySteps: number | "",
+        occupation: Occupation,
+        sessionsPerWeek: number | "",
+        durationPerSession: number | "",
+        trainingIntensity: Intensity
+    }
+    goalData: {
+        goal: Goal,
+        weeksToGoal: number | "",
+        targetWeight: number | ""
+    }
+}
