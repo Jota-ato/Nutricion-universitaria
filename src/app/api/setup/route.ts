@@ -13,7 +13,7 @@ type calculatedStatsType = {
         calories: number
         protein: number
         carbs: number
-        fat: SVGAnimatedNumberList
+        fat: number
     }
 }
 
@@ -70,6 +70,7 @@ export async function POST(request: Request) {
         const { error: errorMacros } = await supabaseAdmin
             .from('macros_info')
             .upsert({
+                user_id: userId,
                 tdee: calculatedStats.tdee,
                 bmr: calculatedStats.bmr,
                 calories: calculatedStats.macrosDistribution.calories,

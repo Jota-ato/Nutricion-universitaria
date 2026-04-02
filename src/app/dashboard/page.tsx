@@ -18,7 +18,7 @@ export default function Dashboard() {
                     method: 'POST',
                     body: JSON.stringify({
                         userId: user.id,
-                        profileData: formData.basicData,
+                        profileData: formData,
                         calculatedStats
                     })
                 });
