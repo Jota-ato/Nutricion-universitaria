@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createClient } from '@supabase/supabase-js'
 import { formDataType } from '@/app/types';
+import { createClient } from '@supabase/supabase-js'
 
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -12,26 +11,29 @@ export async function POST(request: Request) {
         const { userId, profileData }: { userId: string, profileData: formDataType } = await request.json();
         const { basicData, activityData, goalData } = profileData;
 
-        const { error: userError } = await supabaseAdmin
+        // 1. Registro en la tabla principal de Usuarios
+        const { error: errorUser } = await supabaseAdmin
             .from('Users')
             .upsert({
                 id: userId,
                 name: basicData.name,
             });
-        if (userError) throw userError;
+        if (errorUser) throw errorUser;
 
-        const { error: basicError } = await supabaseAdmin
+        // 2. Registro en basic_info (¡IMPORTANTE: incluir user_id!)
+        const { error: errorBasic } = await supabaseAdmin
             .from('basic_info')
             .upsert({
-                user_id: userId,
+                user_id: userId, // Vincula los datos con el usuario
                 sex: basicData.sex,
                 age: basicData.age,
                 height: basicData.height,
                 weight: basicData.weight,
             });
-        if (basicError) throw basicError;
+        if (errorBasic) throw errorBasic;
 
-        const { error: activityError } = await supabaseAdmin
+        // 3. Registro en activity_info
+        const { error: errorActivity } = await supabaseAdmin
             .from('activity_info')
             .upsert({
                 user_id: userId,
@@ -41,9 +43,10 @@ export async function POST(request: Request) {
                 duration_per_session: activityData.durationPerSession,
                 training_intensity: activityData.trainingIntensity,
             });
-        if (activityError) throw activityError;
+        if (errorActivity) throw errorActivity;
 
-        const { error: goalError } = await supabaseAdmin
+        // 4. Registro en goal_info
+        const { error: errorGoal } = await supabaseAdmin
             .from('goal_info')
             .upsert({
                 user_id: userId,
@@ -51,12 +54,13 @@ export async function POST(request: Request) {
                 target_weight: goalData.targetWeight,
                 weeks_to_goal: goalData.weeksToGoal,
             });
-        if (goalError) throw goalError;
+        if (errorGoal) throw errorGoal;
 
         return Response.json({ success: true }, { status: 201 });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        console.error("Error en el setup del usuario:", error.message);
+        console.error("ERROR EN SETUP:", error.message);
         return Response.json({ error: error.message }, { status: 500 });
     }
 }
