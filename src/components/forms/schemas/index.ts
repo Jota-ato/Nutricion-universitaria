@@ -103,7 +103,7 @@ export type ActivityFormType = UseFormReturn<{
     sessionsPerWeek: number | "";
     durationPerSession: number | "";
     occupation: Occupation;
-    trainingIntensity: Intensity;
+    trainingIntensity: Intensity | "";
     dailySteps: number | "";
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }, any, undefined>

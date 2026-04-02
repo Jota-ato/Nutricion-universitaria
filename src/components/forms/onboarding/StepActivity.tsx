@@ -19,7 +19,6 @@ import { Intensity, Occupation } from "@/features/calc"
 
 export default function StepActivity() {
     const setStep = useOnboardingStore(state => state.setStep);
-    const activityData = useOnboardingStore(state => state.formData.activityData)
     const updateFormData = useOnboardingStore(state => state.updateFormData);
     const [localStep, setLocalStep] = useState(1);
 
@@ -79,6 +78,7 @@ export default function StepActivity() {
         } else {
             const data = stepActivitySchema.parse(form.getValues());
             const { dailySteps, occupation, durationPerSession, sessionsPerWeek, trainingIntensity } = data;
+            if (!trainingIntensity) return;
             updateFormData({ activityData: { dailySteps, occupation, durationPerSession, sessionsPerWeek, trainingIntensity } });
             setStep(3);
         }

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { calculateBMR, calculateDynamicMacros, calculatePrecisePAL, type Goal, type Intensity, type MacroDistribution, type Occupation, type Sex } from '@/features/calc';
+import { calculateBMR, calculateDynamicMacros, calculatePrecisePAL, type Goal, type MacroDistribution, type Sex } from '@/features/calc';
 import { calculateTDEE } from '@/features/calc/TDEE';
 import { formDataType } from '@/app/types';
 
