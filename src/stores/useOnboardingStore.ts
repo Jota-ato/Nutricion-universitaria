@@ -33,8 +33,8 @@ export const useOnboardingStore = create<OnboardingState>()(
                     dailySteps: "",
                     sessionsPerWeek: "",
                     durationPerSession: "",
-                    occupation: '' as Occupation,
-                    trainingIntensity: '' as Intensity
+                    occupation: 'sedentary',
+                    trainingIntensity: 'low'
                 },
                 goalData: {
                     goal: "" as Goal,
@@ -61,13 +61,12 @@ export const useOnboardingStore = create<OnboardingState>()(
                 const { dailySteps, durationPerSession, occupation, sessionsPerWeek, trainingIntensity } = get().formData.activityData;
                 const { goal, targetWeight, weeksToGoal } = get().formData.goalData;
 
-                console.log(get().formData);
                 if (!sex || typeof height !== 'number' || typeof weight !== 'number' || typeof age !== 'number') return;
                 if (typeof durationPerSession !== 'number' || typeof sessionsPerWeek !== 'number' || typeof dailySteps !== 'number') return;
 
                 console.log('First filter passed');
                 if (goal !== 'maintenance') {
-                    if (typeof targetWeight !== 'number' || typeof weeksToGoal !== 'number') return;
+                    if (isNaN(Number(targetWeight)) || isNaN(Number(weeksToGoal))) return;
                 }
                 console.log('Second filter passed');
 
@@ -78,8 +77,8 @@ export const useOnboardingStore = create<OnboardingState>()(
                 const macros = calculateDynamicMacros(tdee, {
                     goal,
                     currentWeight: weight,
-                    targetWeight: goal === 'maintenance' ? weight : (targetWeight as number),
-                    weeksToGoal: goal === 'maintenance' ? 1 : (weeksToGoal as number)
+                    targetWeight: goal === 'maintenance' ? weight : (+targetWeight),
+                    weeksToGoal: goal === 'maintenance' ? 1 : (+weeksToGoal)
                 });
                 console.log({bmr, tdee, macros})
 

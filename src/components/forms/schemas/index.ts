@@ -60,12 +60,13 @@ export const stepBasicSchema = z.object({
 });
 
 export type StepBasicValues = z.infer<typeof stepBasicSchema>
-
 export const stepActivitySchema = z.object({
     hasActivity: z.boolean(),
     occupation: z.enum(occupationValues),
-    trainingIntensity: z.enum(intensityValues),
-
+    trainingIntensity: z.union([
+        z.enum(intensityValues),
+        z.literal("")
+    ]).default('low'),
     dailySteps: z.union([z.literal(""), z.coerce.number()]),
     sessionsPerWeek: z.union([z.literal(""), z.coerce.number()]),
     durationPerSession: z.union([z.literal(""), z.coerce.number()]),

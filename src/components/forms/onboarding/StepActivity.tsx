@@ -32,35 +32,45 @@ export default function StepActivity() {
     const form = useForm<StepActivityValues>({
         resolver: zodResolver(stepActivitySchema),
         defaultValues: {
-            dailySteps: "",
+            dailySteps: 0,
             durationPerSession: "",
             hasActivity: false,
             occupation: "" as Occupation,
-            sessionsPerWeek: "",
+            sessionsPerWeek: 0,
             trainingIntensity: "" as Intensity
         },
         mode: "onChange"
     })
+
     const doesActivity = useWatch({
         control: form.control,
         name: "hasActivity"
-    });
+    }) ?? false;
 
     const onNextStep = async () => {
+        console.log("Valores actuales del form:", form.getValues());
         const fieldsByStep: Record<number, (keyof StepActivityValues)[]> = {
             1: ["occupation"],
             2: ["dailySteps"],
             3: ["hasActivity"],
             4: ["sessionsPerWeek", "durationPerSession", "trainingIntensity"],
         };
-
+        console.log(form.getValues())
         const isValid = await form.trigger(fieldsByStep[localStep]);
         if (!isValid) return;
+        const values = form.getValues();
 
-        if (localStep === 3 && !doesActivity) {
-            const { dailySteps, occupation } = stepActivitySchema.parse(form.getValues());
-            updateFormData({ activityData: { dailySteps, occupation, durationPerSession: 0, sessionsPerWeek: 0, trainingIntensity: 'low' } });
-            setStep(3);
+        if (localStep === 3 && doesActivity === false) {
+            updateFormData({
+                activityData: {
+                    dailySteps: Number(values.dailySteps) || 0,
+                    occupation: values.occupation,
+                    durationPerSession: 0,
+                    sessionsPerWeek: 0,
+                    trainingIntensity: 'low'
+                }
+            });
+            setStep(3); // Avanza al siguiente paso del onboarding
             return;
         }
 
@@ -123,6 +133,6 @@ export default function StepActivity() {
                     </Field>
                 </FieldGroup>
             </FieldGroup>
-        </AnimatePresence >
+        </AnimatePresence>
     )
 }

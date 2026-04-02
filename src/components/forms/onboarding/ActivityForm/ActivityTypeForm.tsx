@@ -14,10 +14,21 @@ import {
 } from "@/components/ui/field"
 import { Controller } from "react-hook-form"
 import type { ActivityFormType } from "../../schemas" 
+import { useEffect } from "react"
 
 export default function ActivityTypeForm({ form }: { form: ActivityFormType }) {
     const doesActivity = form.watch("hasActivity");
+    useEffect(() => {
+            console.log(form.getValues())     
+        if (!doesActivity) {
+            form.setValue("trainingIntensity", 'low')
+            form.setValue("durationPerSession", 0)
+            form.setValue("sessionsPerWeek", 0)
+        }
+    }, [doesActivity, form])
 
+
+    
     return (
         <>
             <Controller
@@ -59,9 +70,10 @@ export default function ActivityTypeForm({ form }: { form: ActivityFormType }) {
                         <Field>
                             <FieldLabel htmlFor="trainingIntensity">
                                 ¿Con qué intensidad realizas actividad?
-                            </FieldLabel>
+                            </FieldLabel> 
                             <Select
                                 value={field.value}
+                                defaultValue="low"
                                 onValueChange={field.onChange}
                             >
                                 <SelectTrigger id="trainingIntensity" onBlur={field.onBlur}>
