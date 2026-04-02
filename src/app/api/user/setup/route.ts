@@ -9,7 +9,7 @@ const supabaseAdmin = createClient(
 type calculatedStatsType = {
     tdee: number
     bmr: number
-    macrosDistribution: {
+    macros: {
         calories: number
         protein: number
         carbs: number
@@ -67,16 +67,17 @@ export async function POST(request: Request) {
             });
         if (errorGoal) throw errorGoal;
 
+        const { calories, carbs, fat, protein } = calculatedStats.macros;
         const { error: errorMacros } = await supabaseAdmin
             .from('macros_info')
             .upsert({
                 user_id: userId,
                 tdee: calculatedStats.tdee,
                 bmr: calculatedStats.bmr,
-                calories: calculatedStats.macrosDistribution.calories,
-                carbs: calculatedStats.macrosDistribution.carbs,
-                protein: calculatedStats.macrosDistribution.protein,
-                fat: calculatedStats.macrosDistribution.fat,
+                calories,
+                carbs,
+                protein,
+                fat,
             })
         if (errorMacros) throw errorMacros;
         

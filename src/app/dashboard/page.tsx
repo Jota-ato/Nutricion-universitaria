@@ -13,6 +13,7 @@ export default function Dashboard() {
             const { data: { user } } = await supabase.auth.getUser();
 
             // Si hay datos en el store y el usuario ya se logueó
+            console.log(formData, calculatedStats)
             if (user && formData.basicData.name) {
                 await fetch('/api/user/setup', {
                     method: 'POST',

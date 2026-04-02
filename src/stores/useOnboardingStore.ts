@@ -82,7 +82,17 @@ export const useOnboardingStore = create<OnboardingState>()(
                 });
                 console.log({bmr, tdee, macros})
 
-                set(() => ({ calculatedStats: { bmr, tdee, macros } }));
+                set((state) => ({
+                    calculatedStats: { bmr, tdee, macros },
+                    formData: {
+                        ...state.formData,
+                        goalData: {
+                            ...state.formData.goalData,
+                            targetWeight: +targetWeight,
+                            weeksToGoal: +weeksToGoal
+                        }
+                    }
+                }));
             }
         }),
         { name: 'onboarding-storage' }
