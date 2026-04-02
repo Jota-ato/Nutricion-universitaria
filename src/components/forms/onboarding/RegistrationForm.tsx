@@ -2,8 +2,12 @@
 import { FieldGroup, FieldLegend } from "@/components/ui/field";
 import { useOnboardingStore } from "@/stores/useOnboardingStore";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/lib/supabase"; 
+import { supabase } from "@/lib/supabase";
 
+/**
+ * Uses supabase to sign in with google
+ * @returns the registration component
+ */
 export default function RegistrationForm() {
     const calculatedStats = useOnboardingStore(state => state.calculatedStats);
 
@@ -11,7 +15,6 @@ export default function RegistrationForm() {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                // Aquí defines a qué ruta de tu app regresará el usuario tras loguearse
                 redirectTo: `${window.location.origin}/dashboard`
             }
         });

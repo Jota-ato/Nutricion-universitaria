@@ -37,7 +37,6 @@ export const stepBasicSchema = z.object({
     weight: z.union([z.literal(""), z.coerce.number()]),
 }).superRefine((data, ctx) => {
 
-    // Validamos la Edad
     if (data.age === "") {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: "La edad es requerida", path: ["age"] });
     } else {
@@ -45,7 +44,6 @@ export const stepBasicSchema = z.object({
         if (data.age > 100) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Edad máxima 100 años", path: ["age"] });
     }
 
-    // Validamos la Altura
     if (data.height === "") {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: "La altura es requerida", path: ["height"] });
     } else {
@@ -53,7 +51,6 @@ export const stepBasicSchema = z.object({
         if (data.height > 250) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Altura máxima 250cm", path: ["height"] });
     }
 
-    // Validamos el Peso
     if (data.weight === "") {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: "El peso es requerido", path: ["weight"] });
     } else {
@@ -82,7 +79,6 @@ export const stepActivitySchema = z.object({
         if (data.dailySteps > 50000) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Valor poco realista", path: ["dailySteps"] });
     }
 
-    // 2. Validación CONDICIONAL para las sesiones y duración (solo si hace ejercicio)
     if (data.hasActivity) {
         if (data.sessionsPerWeek === "") {
             ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Ingresa cuántas sesiones", path: ["sessionsPerWeek"] });
